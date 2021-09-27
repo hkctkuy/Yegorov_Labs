@@ -1,8 +1,10 @@
 // Input data: unlimited string
-// End sign: string "."
+// End sign: EOF
 
 #include <stdio.h>
 #include <stdlib.h>
+
+void outArray(char **arr);
 
 char * getString() {  // Get dynamic string
 
@@ -10,7 +12,7 @@ char * getString() {  // Get dynamic string
 
     string = malloc(sizeof(char));
 
-    while ((character = getchar()) != '\n' && character != '.') {
+    while ((character = getchar()) != '\n' && character != EOF) {
 
         string[size++] = character;
 
@@ -22,7 +24,7 @@ char * getString() {  // Get dynamic string
 
     else
 
-        string[size] = '.';
+        string[size] = EOF;
 
     return string;
 }
@@ -33,7 +35,7 @@ char **getArray() {  // Get dynamic array of dynamic string
 
     arr = malloc(sizeof(char *));
 
-    while (*(string = getString()) != '.') {
+    while (*(string = getString()) != EOF) {
 
         arr[size++] = string;
 
@@ -48,7 +50,7 @@ void outArray(char **arr) {  //  Array Output
 
     int i = 0;
 
-    while(*arr[i] != '.')
+    while(*arr[i] != EOF)
 
         printf("%s\n", arr[i++]);
 }
@@ -84,7 +86,7 @@ void sort(char **arr) {  // Sort string by lexicographic order
 
     int size = -1;
 
-    while (*arr[++size] != '.');
+    while (*arr[++size] != EOF);
 
     int i, j;
 
