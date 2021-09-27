@@ -51,6 +51,8 @@ void outArray(char **arr) {  //  Array Output
     while(*arr[i] != EOF)
 
         printf("%s\n", arr[i++]);
+
+    return;
 }
 
 int alf(char *string1, char *string2) {  // Comparison of string by lexicographic order
@@ -78,6 +80,8 @@ void swap(char **string1, char **string2) {  // Swap string pointers
 
     tmp = *string1; *string1 = *string2; *string2 = tmp;
 
+    return;
+
 }
 
 void sort(char **arr) {  // Sort string by lexicographic order
@@ -95,6 +99,8 @@ void sort(char **arr) {  // Sort string by lexicographic order
             if(!alf(arr[i],arr[j]))
 
                 swap(&arr[i],&arr[j]);
+
+    return;
 }
 
 int main() {
