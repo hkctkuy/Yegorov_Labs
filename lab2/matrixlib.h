@@ -1,36 +1,36 @@
 #include <stdio.h>
 #include <stdlib.h>
 // Made by hkctkuy (Ilya Yegorov)
-float **allocate_matrix(int n, int m) {  // Allocate memory for matrix
+float **allocate_matrix(int row_size, int column_size) {  // Allocate memory for matrix
 
     float **matrix; int i;
 
-    matrix = malloc(n * sizeof(float *));  // Memory allocation for matrix
+    matrix = malloc(row_size * sizeof(float *));  // Memory allocation for matrix
 
-    for (i = 0; i < n; i++) {
+    for (i = 0; i < row_size; i++) {
 
-        matrix[i] = malloc(m * sizeof(float));
+        matrix[i] = malloc(column_size * sizeof(float));
     }
     return matrix;
 }
 
-float **get_matrix(int n, int m) {  // Creat matrix with size n * m and return adress
+float **get_matrix(int row_size, int column_size) {  // Creat matrix with size n * m and return adress
 
     float **matrix; int i, j, NaN = 0;
 
-    printf("%s%d%s%d%s\n", "Input your matrix (", n, "*", m, "): ");
+    printf("%s%d%s%d%s\n", "Input your matrix (", row_size, "*", column_size, "): ");
 
-    matrix = allocate_matrix(n, m);
+    matrix = allocate_matrix(row_size, column_size);
 
-    for (i = 0; i < n; i++) {
+    for (i = 0; i < row_size; i++) {
 
-        for (j = 0; j < m; j++) {
+        for (j = 0; j < column_size; j++) {
 
-            char ch, input_stream[256] = {'\0'}; int size = 0;  // Сhecking for correctness of input ("Проверка на дурака/full checking")
+            char charcacter, input_stream[256] = {'\0'}; int size = 0;  // Сhecking for correctness of input ("Проверка на дурака/full checking")
 
-            while ((ch = getchar()) != ' ' && ch != '\n') {
+            while ((charcacter = getchar()) != ' ' && charcacter != '\n') {
 
-                input_stream[size++] = ch;
+                input_stream[size++] = charcacter;
             }
             NaN = sscanf(input_stream, "%f", &matrix[i][j]) != 1;
 
@@ -46,7 +46,7 @@ float **get_matrix(int n, int m) {  // Creat matrix with size n * m and return a
     }
     if(NaN) {  // Clean memory if input isn't correct
 
-      for (i = 0; i < n; i++) {
+      for (i = 0; i < row_size; i++) {
 
           free(matrix[i]);
       }
@@ -60,13 +60,13 @@ float **get_matrix(int n, int m) {  // Creat matrix with size n * m and return a
     return matrix;
 }
 
-void matrix_scalar_multiplication (float **matrix, int n, int m, float scalar) {  // Multiply matrix with size n * m by scalar
+void matrix_scalar_multiplication (float **matrix, int row_size, int column_size, float scalar) {  // Multiply matrix with size n * m by scalar
 
     int i, j;
 
-    for (i = 0; i < n; i++) {
+    for (i = 0; i < row_size; i++) {
 
-        for (j = 0; j < m; j++) {
+        for (j = 0; j < column_size; j++) {
 
             matrix[i][j] *= scalar;
         }
@@ -74,24 +74,24 @@ void matrix_scalar_multiplication (float **matrix, int n, int m, float scalar) {
     return;
 }
 
-float **matrix_multiplication(float **matrix1, int n1, int m1, float **matrix2, int n2, int m2) {
+float **matrix_multiplication(float **matrix1, int row_size_1, int column_size_1, float **matrix2, int row_size_2, int column_size_2) {
 
     float **result_matrix; int i, j, k;
 
-    if (m1 != n2) {
+    if (column_size_1 != row_size_2) {
 
         printf("%s\n", "Error: Can't multiply matrices with such sizes");
 
         return 0;
     }
 
-    result_matrix = allocate_matrix(n1, m2);
+    result_matrix = allocate_matrix(row_size_1, column_size_2);
 
-    for (i = 0; i < n1; i++) {
+    for (i = 0; i < row_size_1; i++) {
 
-        for (j = 0; j < m2; j++) {
+        for (j = 0; j < column_size_2; j++) {
 
-            for (k = 0; k < m1; k++) {
+            for (k = 0; k < column_size_1; k++) {
 
                 result_matrix[i][j] += matrix1[i][k] * matrix2[k][j];
             }
@@ -108,13 +108,13 @@ void swap_matrix_string(float **string1, float **string2) {  //Swap strings in m
 
     return;
 }
-void gaussian_elemntion(float **matrix, int n) {  // Confirm Gaussian elimination for square matrix and remember all transformations
+void gaussian_elemntion(float **matrix, int row_size) {  // Confirm Gaussian elimination for square matrix and remember all transformations
 
     int i, j, k;
 
-    for (j = 0; j < n; j++) {
+    for (j = 0; j < row_size; j++) {
 
-        for (i = j; i < n; i++) {  // Putting a nonzero element on the diagonal (if possible)
+        for (i = j; i < row_size; i++) {  // Putting a nonzero element on the diagonal (if possible)
 
             if (matrix[i][j] != 0) {
 
@@ -125,11 +125,11 @@ void gaussian_elemntion(float **matrix, int n) {  // Confirm Gaussian eliminatio
         }
         if (matrix[j][j] != 0) {  // Zeroing the rest of the lines
 
-            for (i = j + 1; i < n; i++) {
+            for (i = j + 1; i < row_size; i++) {
 
                 float coefficient = matrix[i][j];
 
-                for(k = j; k < n; k++) {
+                for(k = j; k < row_size; k++) {
 
                     matrix[i][k] -= coefficient / matrix[j][j] * matrix[j][k];
                 }
@@ -139,9 +139,9 @@ void gaussian_elemntion(float **matrix, int n) {  // Confirm Gaussian eliminatio
     return;
 }
 
-float det(float **matrix, int n, int m) {  // Calculate the determinant of a matrix (Gaussian elimination)
+float det(float **matrix, int row_size, int column_size) {  // Calculate the determinant of a matrix (Gaussian elimination)
 
-    if (n != m) {
+    if (row_size != column_size) {
 
         printf("%s\n", "Error: Matrix is not square");
 
@@ -149,22 +149,22 @@ float det(float **matrix, int n, int m) {  // Calculate the determinant of a mat
     }
     float determinant = 1; int i;
 
-    gaussian_elemntion(matrix, n);
+    gaussian_elemntion(matrix, row_size);
 
-    for (i = 0; i < n; i++) {
+    for (i = 0; i < row_size; i++) {
 
         determinant *= matrix[i][i];
     }
 
     return determinant;
 }
-void print_matrix(float **matrix, int n, int m) {  // Print matrix with size n * m
+void print_matrix(float **matrix, int row_size, int column_size) {  // Print matrix with size n * m
 
     int i, j;
 
-    for (i = 0; i < n; i++) {
+    for (i = 0; i < row_size; i++) {
 
-      for (j = 0; j < m; j++) {
+      for (j = 0; j < column_size; j++) {
 
           printf("%f%c", matrix[i][j], ' ');
       }
