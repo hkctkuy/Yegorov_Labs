@@ -1,1 +1,1 @@
-# Egorov_Labs
+# Yegorov_Labs
