@@ -2,11 +2,11 @@
 #include <stdlib.h>
 // Made by hkctkuy (Ilya Yegorov)
 
-struct list {
+struct List {
 
     char *string;
 
-    struct list *next;
+    struct List *next;
 };
 
 char * get_string() {  // Get dynamic string
@@ -46,9 +46,9 @@ int lexicographic(char *string1, char *string2) {  // Comparison of string by le
     return result;
 }
 
-struct list * find_place(struct list *list_pointer, char *string) {  // Finding place for string to maintain lexicographic order
+struct List * find_place(struct List *list_pointer, char *string) {  // Finding place for string to maintain lexicographic order
 
-    struct list *place; int order;
+    struct List *place; int order;
 
     if (list_pointer == NULL) {
 
@@ -70,9 +70,9 @@ struct list * find_place(struct list *list_pointer, char *string) {  // Finding 
     return place;
 }
 
-struct list * get_list() {  // Creat list with num nodes and return point
+struct List * get_list() {  // Creat list with num nodes and return point
 
-    struct list *list_pointer = NULL, *place, *new_node_poiter, *end_node_poiter;
+    struct List *list_pointer = NULL, *place, *new_node_poiter, *end_node_poiter;
 
     int num, i; char *new_string;
 
@@ -84,7 +84,7 @@ struct list * get_list() {  // Creat list with num nodes and return point
 
         new_string = get_string();
 
-        list_pointer = malloc(sizeof(struct list));
+        list_pointer = malloc(sizeof(struct List));
 
         list_pointer->next = NULL;
 
@@ -98,7 +98,7 @@ struct list * get_list() {  // Creat list with num nodes and return point
 
         place = find_place(list_pointer, new_string);
 
-        new_node_poiter = malloc(sizeof(struct list));
+        new_node_poiter = malloc(sizeof(struct List));
 
         if(place == NULL) {  // If add to the end
 
@@ -127,7 +127,7 @@ struct list * get_list() {  // Creat list with num nodes and return point
     return list_pointer;
 }
 
-void print_list(struct list * list_pointer) {  // Print list
+void print_list(struct List * list_pointer) {  // Print list
 
     if (list_pointer != NULL) {
 
@@ -138,7 +138,7 @@ void print_list(struct list * list_pointer) {  // Print list
     return;
 }
 
-void free_list(struct list * list_pointer) {
+void free_list(struct List * list_pointer) {
 
     if (list_pointer != NULL) {
 
@@ -153,7 +153,7 @@ void free_list(struct list * list_pointer) {
 
 int main() {
 
-    struct list *list_pointer; int repeat;
+    struct List *list_pointer; int repeat;
 
     do {
 
