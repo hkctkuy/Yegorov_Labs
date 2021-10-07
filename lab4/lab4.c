@@ -15,7 +15,7 @@ void find_most_common_string(char *most_common_string, int max_length, FILE *fil
 
         current_number = 0;
 
-        while (fgets(actual_string, max_length, file_pointer) != NULL) {
+        while (fgets(actual_string, max_length, file_pointer) != NULL) {  //Get strings until the file ends
 
             if (strcmp(current_string, actual_string) == 0) {
 
