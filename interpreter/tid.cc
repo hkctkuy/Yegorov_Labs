@@ -1,4 +1,4 @@
-#include "table_ident.h"
+#include "tid.h"
 
 Table_Ident::Table_Ident(int max_size) : size(max_size), top(1) {
 
