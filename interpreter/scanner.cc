@@ -7,7 +7,7 @@ Table_Ident Scanner::TID(100);
 const char* Scanner::TW[] = { "", "and", "begin", "bool", "continue", "do", "else", "end", "false", "for", "if", "int",
                            "not", "or", "program", "read", "real", "string", "then", "true", "var", "while", "write", NULL };
 
-const char* Scanner::TD[] = { "", "@ was here before", ";", ",", ":", ":=", "(", ")", "=", "<", ">", "+", "++", "-", "--", "*", "/", "<=", "!=", ">=", NULL };
+const char* Scanner::TD[] = { "", "@ was here before", ";", ",", ":", ":=", "(", ")", "{", "}", "=", "<", ">", "+", "++", "-", "--", "*", "/", "<=", "!=", ">=", NULL };
 
 Scanner::Scanner(const char* program) {
 
@@ -315,7 +315,7 @@ Lex Scanner::get_lex() {
 
 std::ostream& operator<<(std::ostream& out, Lex l) {
 
-    if (l.type == LEX_ID) { out << "(TID) " << Scanner::TID[l.int_value].get_name(); }
+    if (l.type == LEX_ID) { out << "(TID) " << l.int_value << ' ' << Scanner::TID[l.int_value].get_name(); }
 
     else if (l.type < LEX_FIN) { out << "(TW) " << Scanner::TW[l.type] << ' '; }
 
