@@ -1,6 +1,6 @@
 #pragma once
 
-#include "table_ident.h"
+#include "tid.h"
 #include "lex.h"
 
 #include <iostream>
