@@ -1,6 +1,6 @@
 #include "lex.h"
 
-Lex::Lex(type_of_lex t) : type(t) {}
+Lex::Lex(type_of_lex t) : type(t), int_value(t) {}
 
 Lex::Lex(type_of_lex t, int v) : type(t), int_value(v) {}
 

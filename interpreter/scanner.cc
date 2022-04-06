@@ -118,6 +118,7 @@ Lex Scanner::get_lex() {
                 buf[buf_top++] = c;
             }
             else {
+
                 ungetc(c, fp);
 
                 if ((n = look(buf, TW))) {
