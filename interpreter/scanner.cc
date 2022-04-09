@@ -7,7 +7,7 @@ Table_Ident Scanner::TID(100);
 const char* Scanner::TW[] = { "", "and", "continue", "else", "false", "for", "if", "int",
                            "not", "or", "program", "read", "real", "string", "true", "while", "write", NULL };
 
-const char* Scanner::TD[] = { "", ";", ",", "=", "(", ")", "{", "}", "==", "<", ">", "+", "++", "-", "--", "*", "/", "<=", "!=", ">=", NULL };
+const char* Scanner::TD[] = { "", ";", ",", "=", "(", ")", "{", "}", "==", "<", ">", "+", "-", "*", "/", "<=", "!=", ">=", NULL };
 
 Scanner::Scanner(const char* program) {
 
@@ -249,15 +249,7 @@ Lex Scanner::get_lex() {
 
         case PLUS:
 
-            if (c == '+') {
-
-                buf[buf_top++] = c;
-
-                n = look(buf, TD);
-
-                return Lex((type_of_lex)(n + LEX_FIN));
-            }
-            else if (isdigit(c)) {
+            if (isdigit(c)) {
 
                 d = c - '0';
 
@@ -275,15 +267,7 @@ Lex Scanner::get_lex() {
 
         case MINUS:
 
-            if (c == '-') {
-
-                buf[buf_top++] = c;
-
-                n = look(buf, TD);
-
-                return Lex((type_of_lex)(n + LEX_FIN));
-            }
-            else if (isdigit(c)) {
+            if (isdigit(c)) {
 
                 d = (c - '0'); minus_flag = -1;
 
@@ -325,11 +309,11 @@ std::ostream& operator<<(std::ostream& out, Lex l) {
 
     else if (l.type < LEX_INT_CONST) { out << "(TD) " << Scanner::TD[l.type - LEX_FIN] << ' '; }
 
-    else if (l.type == LEX_INT_CONST) { out << l.int_value; }
+    else if (l.type == LEX_INT_CONST) { out << "const int " << l.int_value; }
 
-    else if (l.type == LEX_REAL_CONST) { out << l.real_value; }
+    else if (l.type == LEX_REAL_CONST) { out << "const real " << l.real_value; }
 
-    else if (l.type == LEX_STRING_CONST) { out << l.str_value; }
+    else if (l.type == LEX_STRING_CONST) { out << "const string " << l.str_value; }
 
     else if (l.type == LEX_ID) { out << "(TID) " << l.int_value << ' ' << Scanner::TID[l.int_value].get_name(); }
 

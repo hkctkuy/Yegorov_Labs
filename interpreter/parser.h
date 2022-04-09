@@ -27,11 +27,19 @@ class Parser {
 
     void S();
 
-    void E1();
-
     void E();
 
+    void O();
+
+    void A();
+
+    void L();
+
+    void E1();
+
     void T();
+
+    void N();
 
     void F();
 

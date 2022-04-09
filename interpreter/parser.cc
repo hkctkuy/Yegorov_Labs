@@ -76,6 +76,17 @@ void Parser::D() {
     }
     else throw curr_lex;
 
+    if (curr_type == LEX_ASSIGN) {
+
+        gl();
+
+        if (curr_type == LEX_INT_CONST || curr_type == LEX_REAL_CONST || curr_type == LEX_STRING_CONST) {
+
+            gl();
+        }
+        else throw curr_lex;
+    }
+
     while(curr_type == LEX_COMMA) {
 
         gl();
@@ -212,6 +223,16 @@ void Parser::S() {
         }
         S();
     }
+    else if (curr_type == LEX_CONTINUE) {
+
+        gl();
+
+        if (curr_type == LEX_SEMICOLON) {
+
+            gl();
+        }
+        else throw curr_lex;
+    }
     else if (curr_type == LEX_READ) {
 
         gl();
@@ -282,17 +303,9 @@ void Parser::S() {
         }
         else throw curr_lex;
     }
-    else if (curr_type == LEX_ID) {
+    else {
 
-        gl();
-
-        if (curr_type == LEX_ASSIGN) {
-
-            gl();
-
-            E();
-        }
-        else throw curr_lex;
+        E();
 
         if (curr_type == LEX_SEMICOLON) {
 
@@ -300,19 +313,54 @@ void Parser::S() {
         }
         else throw curr_lex;
     }
-    else throw curr_lex;
 }
 
 void Parser::E() {
 
-  E1();
+  O();
 
-  if (curr_type == LEX_EQ || curr_type == LEX_NEQ || curr_type == LEX_GTR || curr_type == LEX_LSS || curr_type == LEX_GEQ || curr_type == LEX_LEQ) {
+  while (curr_type == LEX_ASSIGN) {
 
       gl();
 
-      E1();
+      O();
   }
+}
+
+void Parser::O() {
+
+    A();
+
+    while (curr_type == LEX_OR) {
+
+        gl();
+
+        A();
+    }
+}
+
+void Parser::A() {
+
+    L();
+
+    while (curr_type == LEX_AND) {
+
+        gl();
+
+        L();
+    }
+}
+
+void Parser::L() {
+
+    E1();
+
+    while (curr_type == LEX_EQ || curr_type == LEX_NEQ || curr_type == LEX_GTR || curr_type == LEX_GEQ || curr_type == LEX_LSS || curr_type == LEX_LEQ) {
+
+        gl();
+
+        E1();
+    }
 }
 
 void Parser::E1() {
@@ -329,11 +377,25 @@ void Parser::E1() {
 
 void Parser::T() {
 
-    F();
+    N();
 
-    while (curr_type == LEX_SLASH || curr_type == LEX_TIMES) {
+    while (curr_type == LEX_TIMES || curr_type == LEX_SLASH) {
 
         gl();
+
+        N();
+    }
+}
+
+void Parser::N() {
+
+    if (curr_type == LEX_NOT) {
+
+        gl();
+
+        F();
+    }
+    else {
 
         F();
     }
@@ -353,7 +415,7 @@ void Parser::F() {
         }
         else throw curr_lex;
     }
-    else if (curr_type == LEX_ID || curr_type == LEX_INT_CONST || curr_type == LEX_REAL_CONST || curr_type == LEX_STRING_CONST) {
+    else if (curr_type == LEX_INT_CONST || curr_type == LEX_REAL_CONST || curr_type == LEX_STRING_CONST || curr_type == LEX_ID) {
 
         gl();
     }
