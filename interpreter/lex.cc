@@ -16,6 +16,6 @@ type_of_lex Lex::get_type() const { return type; }
 
 int Lex::get_int_value() const { return int_value; }
 
-float Lex::get_float_value() const { return real_value; }
+float Lex::get_real_value() const { return real_value; }
 
 char* Lex::get_str_value() const { return str_value; }
