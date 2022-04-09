@@ -18,6 +18,7 @@ void Parser::gl() {
 
         curr_int_value = curr_lex.get_int_value();
     }
+    std::cout << curr_lex << std::endl;
 }
 
 void Parser::P() {
@@ -85,7 +86,7 @@ void Parser::D() {
         }
         else throw curr_lex;
 
-        if (curr_type == LEX_EQ) {
+        if (curr_type == LEX_ASSIGN) {
 
             gl();
 

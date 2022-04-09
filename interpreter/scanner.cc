@@ -4,10 +4,10 @@
 
 Table_Ident Scanner::TID(100);
 
-const char* Scanner::TW[] = { "", "and", "begin", "bool", "continue", "do", "else", "end", "false", "for", "if", "int",
-                           "not", "or", "program", "read", "real", "string", "then", "true", "var", "while", "write", NULL };
+const char* Scanner::TW[] = { "", "and", "continue", "else", "false", "for", "if", "int",
+                           "not", "or", "program", "read", "real", "string", "true", "while", "write", NULL };
 
-const char* Scanner::TD[] = { "", ";", ",", ":", ":=", "(", ")", "{", "}", "=", "<", ">", "+", "++", "-", "--", "*", "/", "<=", "!=", ">=", NULL };
+const char* Scanner::TD[] = { "", ";", ",", "=", "(", ")", "{", "}", "==", "<", ">", "+", "++", "-", "--", "*", "/", "<=", "!=", ">=", NULL };
 
 Scanner::Scanner(const char* program) {
 
@@ -74,7 +74,7 @@ Lex Scanner::get_lex() {
 
                 CS = SLASH;
             }
-            else if (c == ':' || c == '<' || c == '>') {
+            else if (c == '=' || c == '<' || c == '>') {
 
                 buf[buf_top++] = c;
 
@@ -321,17 +321,17 @@ std::ostream& operator<<(std::ostream& out, Lex l) {
 
     out << l.type << ' ';
 
-    if (l.type == LEX_ID) { out << "(TID) " << l.int_value << ' ' << Scanner::TID[l.int_value].get_name(); }
+    if (l.type < LEX_FIN) { out << "(TW) " << Scanner::TW[l.type] << ' '; }
 
-    else if (l.type < LEX_FIN) { out << "(TW) " << Scanner::TW[l.type] << ' '; }
+    else if (l.type < LEX_INT_CONST) { out << "(TD) " << Scanner::TD[l.type - LEX_FIN] << ' '; }
 
-    else { out << "(TD) " << Scanner::TD[l.type - LEX_FIN] << ' '; }
-
-    if (l.type == LEX_INT_CONST) { out << l.int_value; }
+    else if (l.type == LEX_INT_CONST) { out << l.int_value; }
 
     else if (l.type == LEX_REAL_CONST) { out << l.real_value; }
 
     else if (l.type == LEX_STRING_CONST) { out << l.str_value; }
+
+    else if (l.type == LEX_ID) { out << "(TID) " << l.int_value << ' ' << Scanner::TID[l.int_value].get_name(); }
 
     return out;
 }

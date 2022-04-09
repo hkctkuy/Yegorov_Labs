@@ -5,31 +5,31 @@ program {
 
     string e, c, d = "asd";
 
-    a := a * 5 * a + 1 + (b);
+    a = a * 5 * a + 1 + (b);
 
-    a := a < (b + 1);
+    a = a < (b + 1);
 
-    a := 1;
+    a = 1;
 
     read(a);
 
-    {a:=1;}
+    {a=1;}
 
     write(1, "ad", a + 1, a* b, "asd", a);
 
     if (a > b + 1) {
 
-        a := b;
+        a = b;
         }
 
-    else b := 1;
+    else b = 1;
 
-    while(a + 1) {while(a + 1) {} while(a + 1) {}}
+    while(a == 1) {while(a + 1) {} while(a + 1) {}}
 
-    a:=1;
+    a=1;
 
-    for(;;) {a:= 1;}
+    for(;;) {a= 1;}
 
-    for(a+ 1;b; aa*aa) {a:= 1;}
+    for(a+ 1;b; aa*aa) {a= 1;}
 
 }
