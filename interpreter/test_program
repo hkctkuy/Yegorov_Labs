@@ -6,7 +6,7 @@ program
  {
  read (y);
  write (y);
- write (x + z + z, c);
+ write (x + z + + not - - + + z, c);
  }
  else
  c = a = 21;

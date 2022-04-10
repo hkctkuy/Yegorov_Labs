@@ -389,16 +389,11 @@ void Parser::T() {
 
 void Parser::N() {
 
-    if (curr_type == LEX_NOT) {
+    while (curr_type == LEX_NOT || curr_type == LEX_PLUS || curr_type == LEX_MINUS) { // NOT, unary plus and unary minus
 
         gl();
-
-        F();
     }
-    else {
-
-        F();
-    }
+    F();
 }
 
 void Parser::F() {
