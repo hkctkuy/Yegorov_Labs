@@ -20,5 +20,5 @@ int Table_Ident::put(const char* buf) {
     }
     table[top++].set_name(buf);
 
-    return top;
+    return top - 1;
 }

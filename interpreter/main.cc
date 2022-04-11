@@ -1,5 +1,5 @@
 #include "lex.h"
-#include "scanner.h"
+#include "parser.h"
 
 #include <iostream>
 
@@ -9,9 +9,9 @@ int main(int argc, char** argv) {
 
     try {
 
-        Scanner scan(argv[1]); Lex l;
+        Parser pars(argv[1]);
 
-        while ((l = scan.get_lex()).get_type() != LEX_FIN) { cout << l << endl; }
+        pars.analyze();
 
         return 0;
     }
@@ -23,7 +23,7 @@ int main(int argc, char** argv) {
     }
     catch (Lex l) {
 
-        cout << "unexpected lexeme" << l << endl;
+        cout << "unexpected lexeme " << l << endl;
 
         return 1;
     }

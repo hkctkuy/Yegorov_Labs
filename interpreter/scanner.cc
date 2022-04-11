@@ -4,10 +4,10 @@
 
 Table_Ident Scanner::TID(100);
 
-const char* Scanner::TW[] = { "", "and", "begin", "bool", "continue", "do", "else", "end", "false", "for", "if", "int",
-                           "not", "or", "program", "read", "real", "string", "then", "true", "var", "while", "write", NULL };
+const char* Scanner::TW[] = { "", "and", "continue", "else", "false", "for", "if", "int",
+                           "not", "or", "program", "read", "real", "string", "true", "while", "write", NULL };
 
-const char* Scanner::TD[] = { "", "@ was here before", ";", ",", ":", ":=", "(", ")", "=", "<", ">", "+", "++", "-", "--", "*", "/", "<=", "!=", ">=", NULL };
+const char* Scanner::TD[] = { "", ";", ",", "=", "(", ")", "{", "}", "==", "<", ">", "+", "-", "*", "/", "<=", "!=", ">=", NULL };
 
 Scanner::Scanner(const char* program) {
 
@@ -74,7 +74,7 @@ Lex Scanner::get_lex() {
 
                 CS = SLASH;
             }
-            else if (c == ':' || c == '<' || c == '>') {
+            else if (c == '=' || c == '<' || c == '>') {
 
                 buf[buf_top++] = c;
 
@@ -106,11 +106,14 @@ Lex Scanner::get_lex() {
 
                 buf[buf_top++] = c;
 
-                if ((n = look(buf, TD))) { return Lex((type_of_lex)(n + LEX_FIN)); }
+                if ((n = look(buf, TD))) {
 
+                    return Lex((type_of_lex)(n + LEX_FIN));
+                }
                 else { throw c; }
             }
             break;
+
         case IDENT:
 
             if (isalpha(c) || isdigit(c)) {
@@ -118,6 +121,7 @@ Lex Scanner::get_lex() {
                 buf[buf_top++] = c;
             }
             else {
+
                 ungetc(c, fp);
 
                 if ((n = look(buf, TW))) {
@@ -152,7 +156,7 @@ Lex Scanner::get_lex() {
 
                 d *= minus_flag;
 
-                return Lex(LEX_INT, d);
+                return Lex(LEX_INT_CONST, d);
             }
             break;
 
@@ -168,7 +172,7 @@ Lex Scanner::get_lex() {
 
                 f *= minus_flag;
 
-                return Lex(LEX_REAL, f);
+                return Lex(LEX_REAL_CONST, f);
         }
             break;
 
@@ -176,7 +180,7 @@ Lex Scanner::get_lex() {
 
             if (c == '"') {
 
-                return Lex(LEX_STRING, buf);
+                return Lex(LEX_STRING_CONST, buf);
             }
             else if (c == EOF) {
 
@@ -245,15 +249,7 @@ Lex Scanner::get_lex() {
 
         case PLUS:
 
-            if (c == '+') {
-
-                buf[buf_top++] = c;
-
-                n = look(buf, TD);
-
-                return Lex((type_of_lex)(n + LEX_FIN));
-            }
-            else if (isdigit(c)) {
+            if (isdigit(c)) {
 
                 d = c - '0';
 
@@ -271,15 +267,7 @@ Lex Scanner::get_lex() {
 
         case MINUS:
 
-            if (c == '-') {
-
-                buf[buf_top++] = c;
-
-                n = look(buf, TD);
-
-                return Lex((type_of_lex)(n + LEX_FIN));
-            }
-            else if (isdigit(c)) {
+            if (isdigit(c)) {
 
                 d = (c - '0'); minus_flag = -1;
 
@@ -315,17 +303,19 @@ Lex Scanner::get_lex() {
 
 std::ostream& operator<<(std::ostream& out, Lex l) {
 
-    if (l.type == LEX_ID) { out << "(TID) " << Scanner::TID[l.int_value].get_name(); }
+    out << l.type << ' ';
 
-    else if (l.type < LEX_FIN) { out << "(TW) " << Scanner::TW[l.type] << ' '; }
+    if (l.type < LEX_FIN) { out << "(TW) " << Scanner::TW[l.type] << ' '; }
 
-    else { out << "(TD) " << Scanner::TD[l.type - LEX_FIN] << ' '; }
+    else if (l.type < LEX_INT_CONST) { out << "(TD) " << Scanner::TD[l.type - LEX_FIN] << ' '; }
 
-    if (l.type == LEX_INT) { out << l.int_value; }
+    else if (l.type == LEX_INT_CONST) { out << "const int " << l.int_value; }
 
-    else if (l.type == LEX_REAL) { out << l.real_value; }
+    else if (l.type == LEX_REAL_CONST) { out << "const real " << l.real_value; }
 
-    else if (l.type == LEX_STRING) { out << l.str_value; }
+    else if (l.type == LEX_STRING_CONST) { out << "const string " << l.str_value; }
+
+    else if (l.type == LEX_ID) { out << "(TID) " << l.int_value << ' ' << Scanner::TID[l.int_value].get_name(); }
 
     return out;
 }

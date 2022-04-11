@@ -1,1 +1,0 @@
-g++ -o inter inter.cc scanner.cc tid.cc ident.cc lex.cc -Wall
