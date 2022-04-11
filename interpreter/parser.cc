@@ -317,14 +317,14 @@ void Parser::S() {
 
 void Parser::E() {
 
-  O();
+    O();
 
-  while (curr_type == LEX_ASSIGN) {
+    if (curr_type == LEX_ASSIGN) {
 
-      gl();
+        gl();
 
-      O();
-  }
+        E();
+    }
 }
 
 void Parser::O() {
