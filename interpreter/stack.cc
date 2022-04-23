@@ -1,11 +1,11 @@
-#include "sem_stack.h"
+#include "Stack.h"
 
-Sem_stack::Sem_stack() {
+Stack::Stack() {
 
     top = NULL;
 }
 
-Sem_stack::~Sem_stack() {
+Stack::~Stack() {
 
     while(!is_empty()) {
 
@@ -13,14 +13,14 @@ Sem_stack::~Sem_stack() {
     }
 }
 
-bool Sem_stack::is_empty() {
+bool Stack::is_empty() {
 
     if(top == NULL) return true;
 
     else return false;
 }
 
-void Sem_stack::push(type_of_lex t) {
+void Stack::push(type_of_lex t) {
 
     chain* new_chain = new chain;
 
@@ -31,7 +31,7 @@ void Sem_stack::push(type_of_lex t) {
     top = new_chain;
 }
 
-type_of_lex Sem_stack::pop() {
+type_of_lex Stack::pop() {
 
     type_of_lex res = top->type;
 
