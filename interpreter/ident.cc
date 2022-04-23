@@ -8,11 +8,11 @@ void Ident::set_name(const char* n) { name = new char[strlen(n) + 1]; strcpy(nam
 
 char* Ident::get_name() const { return name; }
 
-void Ident::set_declare() { declare = true; }
+void Ident::put_declare() { declare = true; }
 
 bool Ident::get_declare() const { return declare; }
 
-void Ident::set_assign() { assign = true; }
+void Ident::put_assign() { assign = true; }
 
 bool Ident::get_assign() const { return assign; }
 
