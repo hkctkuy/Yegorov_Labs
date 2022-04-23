@@ -21,6 +21,17 @@ void Parser::gl() {
     std::cout << curr_lex << std::endl;
 }
 
+void Parser::push_const(){
+
+    if (curr_type == LEX_INT_CONST) st.push(LEX_INT);
+
+    else if (curr_type == LEX_REAL_CONST) st.push(LEX_REAL);
+
+    else if (curr_type == LEX_STRING_CONST) st.push(LEX_STRING);
+
+    else throw "isn't const";
+}
+
 void Parser::P() {
 
     if(curr_type == LEX_PROGRAM) {
@@ -54,6 +65,8 @@ void Parser::D1() {
 
     while (curr_type == LEX_INT || curr_type == LEX_REAL || curr_type == LEX_STRING) {
 
+        ident_type = curr_type;
+
         gl();
 
         D();
@@ -70,6 +83,10 @@ void Parser::D() {
 
     if (curr_type == LEX_ID) {
 
+        dec();
+
+        st.push(ident_type);
+
         gl();
     }
     else throw curr_lex;
@@ -80,9 +97,17 @@ void Parser::D() {
 
         if (curr_type == LEX_INT_CONST || curr_type == LEX_REAL_CONST || curr_type == LEX_STRING_CONST) {
 
+            push_const();
+
+            eq_type();
+
             gl();
         }
         else throw curr_lex;
+    }
+    else {
+
+        st.pop();
     }
 
     while(curr_type == LEX_COMMA) {
@@ -90,6 +115,10 @@ void Parser::D() {
         gl();
 
         if (curr_type == LEX_ID) {
+
+            dec();
+
+            st.push(ident_type);
 
             gl();
         }
@@ -101,9 +130,17 @@ void Parser::D() {
 
             if (curr_type == LEX_INT_CONST || curr_type == LEX_REAL_CONST || curr_type == LEX_STRING_CONST) {
 
+                push_const();
+
+                eq_type();
+
                 gl();
             }
             else throw curr_lex;
+        }
+        else {
+
+            st.pop();
         }
     }
 }
@@ -243,6 +280,8 @@ void Parser::S() {
 
         if (curr_type == LEX_ID) {
 
+            check_id_in_read();
+
             gl();
         }
         else throw curr_lex;
@@ -315,13 +354,19 @@ void Parser::S() {
 
 void Parser::E() {
 
+    l_value_flag = true;
+
     O();
 
     if (curr_type == LEX_ASSIGN) {
 
+        if(!l_value_flag) throw "Not l_value expression";
+
         gl();
 
         E();
+
+        eq_type();
     }
 }
 
@@ -331,9 +376,13 @@ void Parser::O() {
 
     while (curr_type == LEX_OR) {
 
+        l_value_flag = false;
+
         gl();
 
         A();
+
+        check_O();
     }
 }
 
@@ -343,9 +392,13 @@ void Parser::A() {
 
     while (curr_type == LEX_AND) {
 
+        l_value_flag = false;
+
         gl();
 
         L();
+
+        check_A();
     }
 }
 
@@ -355,9 +408,13 @@ void Parser::L() {
 
     while (curr_type == LEX_EQ || curr_type == LEX_NEQ || curr_type == LEX_GTR || curr_type == LEX_GEQ || curr_type == LEX_LSS || curr_type == LEX_LEQ) {
 
+        l_value_flag = false;
+
         gl();
 
         E1();
+
+        check_L();
     }
 }
 
@@ -367,9 +424,15 @@ void Parser::E1() {
 
     while (curr_type == LEX_PLUS || curr_type == LEX_MINUS) {
 
+        l_value_flag = false;
+
+        st.push(curr_type);
+
         gl();
 
         T();
+
+        check_E1();
     }
 }
 
@@ -379,24 +442,41 @@ void Parser::T() {
 
     while (curr_type == LEX_TIMES || curr_type == LEX_SLASH) {
 
+        l_value_flag = false;
+
         gl();
 
         N();
+
+        check_T();
     }
 }
 
 void Parser::N() {
 
-    while (curr_type == LEX_NOT || curr_type == LEX_PLUS || curr_type == LEX_MINUS) { // NOT, unary plus and unary minus
+    if (curr_type == LEX_NOT || curr_type == LEX_PLUS || curr_type == LEX_MINUS) { // NOT, unary plus and unary minus
+
+        l_value_flag = false;
+
+        st.push(curr_type);
 
         gl();
+
+        N();
+
+        check_N();
     }
-    F();
+    else {
+
+        F();
+    }
 }
 
 void Parser::F() {
 
     if (curr_type == LEX_LPAREN) {
+
+        l_value_flag = false;
 
         gl();
 
@@ -408,11 +488,150 @@ void Parser::F() {
         }
         else throw curr_lex;
     }
-    else if (curr_type == LEX_INT_CONST || curr_type == LEX_REAL_CONST || curr_type == LEX_STRING_CONST || curr_type == LEX_ID) {
+    else if (curr_type == LEX_INT_CONST || curr_type == LEX_REAL_CONST || curr_type == LEX_STRING_CONST) {
+
+        l_value_flag = false;
+
+        push_const();
+
+        gl();
+    }
+    else if(curr_type == LEX_ID) {
+
+        st.push(Scanner::TID[curr_int_value].get_type());
 
         gl();
     }
     else throw curr_lex;
+}
+
+void Parser::check_id() {
+
+    if(Scanner::TID[curr_int_value].get_declare()) {
+
+        st.push(Scanner::TID[curr_int_value].get_type());
+    }
+    else throw "ID is not declared";
+}
+
+void Parser::check_id_in_read() {
+
+    if(!Scanner::TID[curr_int_value].get_declare()) throw "ID is not declared";
+}
+
+void Parser::dec() {
+
+    if(Scanner::TID[curr_int_value].get_declare()) throw "ID has been already declared!";
+
+    else {
+
+        Scanner::TID[curr_int_value].put_declare();
+
+        Scanner::TID[curr_int_value].set_type(ident_type);
+    }
+}
+
+void Parser::eq_type() {
+
+    type_of_lex operand1 = st.pop(), operand2 = st.pop();
+
+    if(operand1 == operand2) {
+
+        st.push(operand1);
+    }
+    else throw "Different types in = !";
+}
+
+void Parser::check_O() {
+
+    type_of_lex operand1 = st.pop(), operand2 = st.pop();
+
+    if (operand1 == LEX_INT && operand2 == LEX_INT) {
+
+        st.push(LEX_INT);
+    }
+    else throw "Wrong types in operation";
+}
+
+void Parser::check_A() {
+
+    type_of_lex operand1 = st.pop(), operand2 = st.pop();
+
+    if (operand1 == LEX_INT && operand2 == LEX_INT) {
+
+        st.push(LEX_INT);
+    }
+    else throw "Wrong types in operation";
+}
+
+void Parser::check_L() {
+
+    type_of_lex operand1 = st.pop(), operand2 = st.pop();
+
+    if (operand1 == LEX_STRING) {
+
+        if (operand2 == LEX_STRING) {
+
+            st.push(LEX_INT);
+        }
+        else throw "Wrong types in operation";
+    }
+    else if (operand2 == LEX_STRING) throw "Wrong types in operation";
+
+    else st.push(LEX_INT);
+}
+
+void Parser::check_E1() {
+
+    type_of_lex operand1 = st.pop(), operation = st.pop(), operand2 = st.pop();
+
+    if (operand1 == LEX_INT && operand2 == LEX_INT) {
+
+        st.push(LEX_INT);
+    }
+    else if (operand1 == LEX_STRING) {
+
+        if (operation == LEX_PLUS || operand2 == LEX_STRING) {
+
+            st.push(LEX_STRING);
+        }
+        else throw "Wrong types in operation";
+    }
+    else if (operand2 == LEX_STRING) throw "Wrong types in operation";
+
+    else st.push(LEX_REAL);
+}
+
+void Parser::check_T() {
+
+    type_of_lex operand1 = st.pop(), operand2 = st.pop();
+
+    if (operand1 == LEX_STRING || operand2 == LEX_STRING) throw "Wrong types in operation";
+
+    else if (operand1 == LEX_INT && operand2 == LEX_INT) {
+
+        st.push(LEX_INT);
+    }
+    else st.push(LEX_REAL);
+}
+
+void Parser::check_N() {
+
+    type_of_lex operand = st.pop(), operation = st.pop();
+
+    if(operand == LEX_INT) {
+
+        st.push(LEX_INT);
+    }
+    else if(operand == LEX_REAL) {
+
+        if(operation == LEX_NOT) throw "Wrong types in operation";
+
+        else st.push(LEX_REAL);
+    }
+    else if(operand == LEX_STRING) throw "Wrong types in operation";
+
+    else throw "WTF?";
 }
 
 Parser::Parser(const char* buf) : scan(buf) {}
