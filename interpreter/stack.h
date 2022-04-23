@@ -9,7 +9,7 @@ struct chain {
     chain* next;
 };
 
-class Sem_stack {
+class Stack {
 
     chain* top;
 
@@ -17,9 +17,9 @@ class Sem_stack {
 
 public:
 
-    Sem_stack();
+    Stack();
 
-    ~Sem_stack();
+    ~Stack();
 
     void push(type_of_lex);
 
