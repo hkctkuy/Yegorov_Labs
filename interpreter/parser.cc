@@ -23,8 +23,6 @@ void Parser::gl() {
 
 void Parser::P() {
 
-    gl();
-
     if(curr_type == LEX_PROGRAM) {
 
         gl();
@@ -32,6 +30,8 @@ void Parser::P() {
     else throw curr_lex;
 
     if(curr_type == LEX_LBRACE) {
+
+        gl();
 
         D1();
 
@@ -52,9 +52,9 @@ void Parser::P() {
 
 void Parser::D1() {
 
-    gl();
-
     while (curr_type == LEX_INT || curr_type == LEX_REAL || curr_type == LEX_STRING) {
+
+        gl();
 
         D();
 
@@ -67,8 +67,6 @@ void Parser::D1() {
 }
 
 void Parser::D() {
-
-    gl();
 
     if (curr_type == LEX_ID) {
 
@@ -420,6 +418,8 @@ void Parser::F() {
 Parser::Parser(const char* buf) : scan(buf) {}
 
 void Parser::analyze() {
+
+    gl();
 
     P();
 
