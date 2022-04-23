@@ -1,4 +1,8 @@
+<<<<<<< HEAD:interpreter/stack.cc
 #include "stack.h"
+=======
+#include "Stack.h"
+>>>>>>> 548a9f20991f77cfce4c60d2baf9dec296db15fa:interpreter/sem_stack.cc
 
 Stack::Stack() {
 
