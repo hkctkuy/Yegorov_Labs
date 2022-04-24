@@ -498,6 +498,8 @@ void Parser::F() {
     }
     else if(curr_type == LEX_ID) {
 
+        check_id();
+
         st.push(Scanner::TID[curr_int_value].get_type());
 
         gl();
@@ -507,11 +509,7 @@ void Parser::F() {
 
 void Parser::check_id() {
 
-    if(Scanner::TID[curr_int_value].get_declare()) {
-
-        st.push(Scanner::TID[curr_int_value].get_type());
-    }
-    else throw "ID is not declared";
+    if(!Scanner::TID[curr_int_value].get_declare()) throw "ID is not declared";
 }
 
 void Parser::check_id_in_read() {

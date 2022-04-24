@@ -72,8 +72,6 @@ class Parser {
 
     void check_N();
 
-    //void check_F();
-
 public:
 
     Parser(const char*);
