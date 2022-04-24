@@ -303,9 +303,11 @@ Lex Scanner::get_lex() {
 
 std::ostream& operator<<(std::ostream& out, Lex l) {
 
-    out << l.type << ' ';
+    //out << l.type << ' ';
 
     if (l.type < LEX_FIN) { out << "(TW) " << Scanner::TW[l.type] << ' '; }
+
+    else if (l.type == LEX_FIN) { out << "FIN"; }
 
     else if (l.type < LEX_INT_CONST) { out << "(TD) " << Scanner::TD[l.type - LEX_FIN] << ' '; }
 
@@ -316,6 +318,16 @@ std::ostream& operator<<(std::ostream& out, Lex l) {
     else if (l.type == LEX_STRING_CONST) { out << "const string " << l.str_value; }
 
     else if (l.type == LEX_ID) { out << "(TID) " << l.int_value << ' ' << Scanner::TID[l.int_value].get_name(); }
+
+    else if (l.type == POLIZ_LABEL) { out << "LABLE " << l.int_value; }
+
+    else if (l.type == POLIZ_ADDRESS) { out << "ADDRESS " << l.int_value << ' ' << Scanner::TID[l.int_value].get_name(); }
+
+    else if (l.type == POLIZ_GO) { out << "GO "; }
+
+    else if (l.type == POLIZ_FGO) { out << "FGO "; }
+
+    else throw "unexpected lexeme in <<";
 
     return out;
 }

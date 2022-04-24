@@ -3,6 +3,7 @@
 #include "lex.h"
 #include "scanner.h"
 #include "stack.h"
+#include "poliz.h"
 
 #include <iostream>
 
@@ -21,6 +22,8 @@ class Parser {
     Scanner scan;
 
     Stack<type_of_lex> st;
+
+    Stack<int> continue_st;
 
     void gl();
 
@@ -73,6 +76,8 @@ class Parser {
     void check_N();
 
 public:
+
+    Poliz prog;
 
     Parser(const char*);
 

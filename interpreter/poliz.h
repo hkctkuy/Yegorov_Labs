@@ -23,5 +23,5 @@ public:
 
     Lex& operator[](int);
 
-    friend std::ostream& operator<<(std::ostream&, Poliz);
+    friend std::ostream& operator<<(std::ostream&, Poliz&);
 };

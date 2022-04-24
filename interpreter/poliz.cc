@@ -21,11 +21,13 @@ int Poliz::size() const { return curr_size; }
 
 Lex& Poliz::operator[](int i) { return p[i]; }
 
-std::ostream& operator<<(std::ostream& out, Poliz poliz) {
+std::ostream& operator<<(std::ostream& out, Poliz& poliz) {
+
+    out << "POLIZ" << std::endl;
 
     for (int i = 0; i < poliz.curr_size; i++) {
 
-        out << poliz.p[i] << ' ';
+        out << i << ' ' << poliz.p[i] << std::endl;
     }
     return out;
 }
