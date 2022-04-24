@@ -12,13 +12,13 @@ class Stack {
 
     chain* top;
 
-    bool is_empty();
-
 public:
 
     Stack();
 
     ~Stack();
+
+    bool is_empty() const;
 
     void push(T);
 
@@ -41,7 +41,7 @@ Stack<T>::~Stack() {
 }
 
 template <class T>
-bool Stack<T>::is_empty() {
+bool Stack<T>::is_empty() const {
 
     if(top == NULL) return true;
 
