@@ -1,7 +1,5 @@
 #pragma once
 
-#include "lex.h"
-
 template <class T>
 class Stack {
 
