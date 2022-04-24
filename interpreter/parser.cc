@@ -164,6 +164,8 @@ void Parser::S() {
             gl();
 
             E();
+
+            st.pop();
         }
         else throw curr_lex;
 
@@ -192,6 +194,8 @@ void Parser::S() {
             gl();
 
             E();
+
+            st.pop();
         }
         else throw curr_lex;
 
@@ -222,6 +226,8 @@ void Parser::S() {
 
             E();
 
+            st.pop();
+
             if (curr_type == LEX_SEMICOLON) {
 
                 gl();
@@ -236,6 +242,8 @@ void Parser::S() {
 
             E();
 
+            st.pop();
+
             if (curr_type == LEX_SEMICOLON) {
 
                 gl();
@@ -249,6 +257,8 @@ void Parser::S() {
         else {
 
             E();
+
+            st.pop();
 
             if (curr_type == LEX_RPAREN) {
 
@@ -310,6 +320,8 @@ void Parser::S() {
 
         E();
 
+        st.pop();
+
         while (curr_type == LEX_COMMA) {
 
             gl();
@@ -343,6 +355,8 @@ void Parser::S() {
     else {
 
         E();
+
+        st.pop();
 
         if (curr_type == LEX_SEMICOLON) {
 
