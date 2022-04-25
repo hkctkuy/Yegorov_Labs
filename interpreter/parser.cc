@@ -400,7 +400,7 @@ void Parser::S() {
 
         if (curr_type == LEX_ID) {
 
-            check_id_in_read();
+            check_id();
 
             prog.push_back(Lex(POLIZ_ADDRESS, curr_int_value));
 
@@ -658,11 +658,6 @@ void Parser::F() {
 }
 
 void Parser::check_id() {
-
-    if(!Scanner::TID[curr_int_value].get_declare()) throw "ID is not declared";
-}
-
-void Parser::check_id_in_read() {
 
     if(!Scanner::TID[curr_int_value].get_declare()) throw "ID is not declared";
 }
