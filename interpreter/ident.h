@@ -25,11 +25,11 @@ public:
 
     char* get_name() const;
 
-    void set_declare();
+    void put_declare();
 
     bool get_declare() const;
 
-    void set_assign();
+    void put_assign();
 
     bool get_assign() const;
 

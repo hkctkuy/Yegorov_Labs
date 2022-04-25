@@ -7,7 +7,7 @@ Table_Ident Scanner::TID(100);
 const char* Scanner::TW[] = { "", "and", "continue", "else", "false", "for", "if", "int",
                            "not", "or", "program", "read", "real", "string", "true", "while", "write", NULL };
 
-const char* Scanner::TD[] = { "", ";", ",", "=", "(", ")", "{", "}", "==", "<", ">", "+", "-", "*", "/", "<=", "!=", ">=", NULL };
+const char* Scanner::TD[] = { "", ";", ",", "(", ")", "{", "}", "=", "==", "!=", "<", ">", "<=", ">=", "+", "-", "*", "/", NULL };
 
 Scanner::Scanner(const char* program) {
 
@@ -307,7 +307,17 @@ std::ostream& operator<<(std::ostream& out, Lex l) {
 
     if (l.type < LEX_FIN) { out << "(TW) " << Scanner::TW[l.type] << ' '; }
 
-    else if (l.type < LEX_INT_CONST) { out << "(TD) " << Scanner::TD[l.type - LEX_FIN] << ' '; }
+    else if (l.type == LEX_FIN) { out << "FIN"; }
+
+    else if (l.type < LEX_U_PLUS) { out << "(TD) " << Scanner::TD[l.type - LEX_FIN] << ' '; }
+
+    else if (l.type < LEX_R_ASSIGN) { out << "(TD) @" << Scanner::TD[l.type - LEX_FIN - UNARY] << ' '; }
+
+    else if (l.type < LEX_U_R_PLUS) { out << "(TD) r" << Scanner::TD[l.type - LEX_FIN - REAL_OFFSET] << ' '; }
+
+    else if (l.type < LEX_S_ASSIGN) { out << "(TD) r@" << Scanner::TD[l.type - LEX_FIN - REAL_OFFSET - UNARY] << ' '; }
+
+    else if (l.type < LEX_INT_CONST) { out << "(TD) s" << Scanner::TD[l.type - LEX_FIN - STRING_OFFSET] << ' '; }
 
     else if (l.type == LEX_INT_CONST) { out << "const int " << l.int_value; }
 
@@ -316,6 +326,16 @@ std::ostream& operator<<(std::ostream& out, Lex l) {
     else if (l.type == LEX_STRING_CONST) { out << "const string " << l.str_value; }
 
     else if (l.type == LEX_ID) { out << "(TID) " << l.int_value << ' ' << Scanner::TID[l.int_value].get_name(); }
+
+    else if (l.type == POLIZ_LABEL) { out << "LABLE " << l.int_value; }
+
+    else if (l.type == POLIZ_ADDRESS) { out << "ADDRESS " << l.int_value << ' ' << Scanner::TID[l.int_value].get_name(); }
+
+    else if (l.type == POLIZ_GO) { out << "GO "; }
+
+    else if (l.type == POLIZ_FGO) { out << "FGO "; }
+
+    else throw "unexpected lexeme in <<";
 
     return out;
 }

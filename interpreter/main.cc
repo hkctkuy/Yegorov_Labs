@@ -13,6 +13,8 @@ int main(int argc, char** argv) {
 
         pars.analyze();
 
+        cout << pars.prog << endl;
+
         return 0;
     }
     catch (char c) {
@@ -29,7 +31,13 @@ int main(int argc, char** argv) {
     }
     catch (const char* str) {
 
-        cout << "(WTF?) " << str << endl;
+        cout << str << endl;
+
+        return 1;
+    }
+    catch(...) {
+
+        cout << "unexpected error" << endl;
 
         return 1;
     }
