@@ -681,13 +681,29 @@ void Parser::dec() {
 
 void Parser::eq_type() {
 
-    type_of_lex operand1 = st.pop(), operation = st.pop(), operand2 = st.pop();
+    type_of_lex r_value = st.pop(), operation = st.pop(), l_value = st.pop();
 
-    if(operand1 == operand2) {
+    if (l_value == LEX_INT) {
 
-        st.push(operand1);
+        if(r_value == LEX_STRING) throw "Different types in = !";
+
+        st.push(l_value);
 
         prog.push_back(Lex(operation));
+    }
+    else if (l_value == LEX_REAL) {
+
+        if(r_value == LEX_STRING) throw "Different types in = !";
+
+        st.push(l_value);
+
+        prog.push_back(Lex((type_of_lex)(operation + REAL_OFFSET)));
+    }
+    else if (l_value == LEX_STRING || r_value == LEX_STRING) {
+
+      st.push(l_value);
+
+      prog.push_back(Lex((type_of_lex)(operation + STRING_OFFSET)));
     }
     else throw "Different types in = !";
 }
@@ -722,23 +738,25 @@ void Parser::check_L() {
 
     type_of_lex operand1 = st.pop(), operation = st.pop(), operand2 = st.pop();
 
-    if (operand1 == LEX_STRING) {
+    if (operand1 == LEX_INT && operand2 == LEX_INT) {
 
-        if (operand2 == LEX_STRING) {
+        st.push(LEX_INT);
 
-            st.push(LEX_INT);
-
-            prog.push_back(Lex(operation));
-        }
-        else throw "Wrong types in operation";
+        prog.push_back(Lex(operation));
     }
-    else if (operand2 == LEX_STRING) throw "Wrong types in operation";
+    else if (operand1 == LEX_STRING && operand2 == LEX_STRING) {
+
+        st.push(LEX_INT);
+
+        prog.push_back(Lex((type_of_lex)(operation + STRING_OFFSET)));
+    }
+    else if (operand1 == LEX_STRING || operand2 == LEX_STRING) throw "Wrong types in operation";
 
     else {
 
         st.push(LEX_INT);
 
-        prog.push_back(Lex(operation));
+        prog.push_back(Lex((type_of_lex)(operation + REAL_OFFSET)));
     }
 }
 
@@ -752,23 +770,21 @@ void Parser::check_E1() {
 
         prog.push_back(Lex(operation));
     }
-    else if (operand1 == LEX_STRING) {
+    else if (operand1 == LEX_STRING && operand2 == LEX_STRING) {
 
-        if (operation == LEX_PLUS || operand2 == LEX_STRING) {
+        if(operation != LEX_PLUS) throw "Wrong types in operation";
 
-            st.push(LEX_STRING);
+        st.push(LEX_STRING);
 
-            prog.push_back(Lex(operation));
-        }
-        else throw "Wrong types in operation";
+        prog.push_back(Lex((type_of_lex)(operation + STRING_OFFSET)));
     }
-    else if (operand2 == LEX_STRING) throw "Wrong types in operation";
+    else if (operand1 == LEX_STRING || operand2 == LEX_STRING) throw "Wrong types in operation";
 
     else {
 
         st.push(LEX_REAL);
 
-        prog.push_back(Lex(operation));
+        prog.push_back(Lex((type_of_lex)(operation + REAL_OFFSET)));
     }
 }
 
@@ -776,19 +792,19 @@ void Parser::check_T() {
 
     type_of_lex operand1 = st.pop(), operation = st.pop(), operand2 = st.pop();
 
-    if (operand1 == LEX_STRING || operand2 == LEX_STRING) throw "Wrong types in operation";
-
-    else if (operand1 == LEX_INT && operand2 == LEX_INT) {
+    if (operand1 == LEX_INT && operand2 == LEX_INT) {
 
         st.push(LEX_INT);
 
         prog.push_back(Lex(operation));
     }
+    else if (operand1 == LEX_STRING || operand2 == LEX_STRING) throw "Wrong types in operation";
+
     else {
 
         st.push(LEX_REAL);
 
-        prog.push_back(Lex(operation));
+        prog.push_back(Lex((type_of_lex)(operation + REAL_OFFSET)));
     }
 }
 
@@ -796,26 +812,32 @@ void Parser::check_N() {
 
     type_of_lex operand = st.pop(), operation = st.pop();
 
-    if(operand == LEX_INT) {
+    if(operand == LEX_STRING) throw "Wrong types in operation";
+
+    else if(operation == LEX_NOT) {
+
+        if(operand != LEX_INT) throw "Wrong types in operation";
 
         st.push(LEX_INT);
 
         prog.push_back(Lex(operation));
     }
-    else if(operand == LEX_REAL) {
+    else {
 
-        if(operation == LEX_NOT) throw "Wrong types in operation";
+        if(operand == LEX_INT) {
+
+          st.push(LEX_INT);
+
+          prog.push_back(Lex((type_of_lex)(operation + UNARY)));
+        }
 
         else {
 
             st.push(LEX_REAL);
 
-            prog.push_back(Lex(operation));
+            prog.push_back(Lex((type_of_lex)(operation + REAL_OFFSET + UNARY)));
         }
     }
-    else if(operand == LEX_STRING) throw "Wrong types in operation";
-
-    else throw "WTF?";
 }
 
 Parser::Parser(const char* buf) : scan(buf), prog(1000) {}
