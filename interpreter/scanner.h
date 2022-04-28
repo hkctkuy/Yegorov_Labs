@@ -4,6 +4,7 @@
 #include "lex.h"
 
 #include <iostream>
+#include <cstdio>
 #include <cmath>
 
 class Scanner {
