@@ -61,7 +61,7 @@ class Parser {
 
     void dec();
 
-    void eq_type();
+    void check_E();
 
     void check_O();
 

@@ -109,7 +109,7 @@ void Parser::D() {
 
             push_const();
 
-            eq_type();
+            check_E();
 
             prog.push_back(Lex(LEX_SEMICOLON));
 
@@ -152,7 +152,7 @@ void Parser::D() {
 
                 push_const();
 
-                eq_type();
+                check_E();
 
                 prog.push_back(Lex(LEX_SEMICOLON));
 
@@ -504,7 +504,7 @@ void Parser::E() {
 
         E();
 
-        eq_type();
+        check_E();
     }
 }
 
@@ -674,7 +674,7 @@ void Parser::dec() {
     }
 }
 
-void Parser::eq_type() {
+void Parser::check_E() {
 
     type_of_lex r_value = st.pop(), operation = st.pop(), l_value = st.pop();
 
@@ -694,7 +694,7 @@ void Parser::eq_type() {
 
         prog.push_back(Lex((type_of_lex)(operation + REAL_OFFSET)));
     }
-    else if (l_value == LEX_STRING || r_value == LEX_STRING) {
+    else if (l_value == LEX_STRING && r_value == LEX_STRING) {
 
       st.push(l_value);
 
