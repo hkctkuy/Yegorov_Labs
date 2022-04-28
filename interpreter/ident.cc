@@ -20,11 +20,11 @@ void Ident::set_type(type_of_lex t) { type = t; }
 
 type_of_lex Ident::get_type() const { return type; }
 
-void Ident::set_int_value(int v) { int_value = v; }
+void Ident::set_int_value(int v) { real_value = int_value = v; }
 
 int Ident::get_int_value() const { return int_value; }
 
-void Ident::set_real_value(float v) { real_value = v; }
+void Ident::set_real_value(float v) { int_value = real_value = v; }
 
 float Ident::get_real_value() const { return real_value; }
 

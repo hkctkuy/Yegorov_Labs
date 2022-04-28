@@ -1,10 +1,10 @@
 #include "lex.h"
 
-Lex::Lex(type_of_lex t) : type(t), int_value(t) {}
+Lex::Lex(type_of_lex t) : type(t) { real_value = int_value = t; }
 
-Lex::Lex(type_of_lex t, int v) : type(t), int_value(v) {}
+Lex::Lex(type_of_lex t, int v) : type(t) { real_value = int_value = v; }
 
-Lex::Lex(type_of_lex t, float v) : type(t), real_value(v) {}
+Lex::Lex(type_of_lex t, float v) : type(t) { int_value = real_value = v; }
 
 Lex::Lex(type_of_lex t, char* buf) : type(t) {
 
