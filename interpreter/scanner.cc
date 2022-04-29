@@ -1,8 +1,6 @@
 #include "scanner.h"
 
-#define MAX_NAME_LEN 80
-
-Table_Ident Scanner::TID(100);
+TS<Ident> Scanner::TID;
 
 const char* Scanner::TW[] = { "", "and", "continue", "else", "false", "for", "if", "int",
                            "not", "or", "program", "read", "real", "string", "true", "while", "write", NULL };
@@ -40,9 +38,9 @@ Lex Scanner::get_lex() {
 
     state CS = H;
 
-    int d, n, p, minus_flag = 1; float f; char buf[MAX_NAME_LEN]; int buf_top = 0;
+    int d, n, p, minus_flag = 1; float f; char buf[MAX_STR_SIZE]; int buf_top = 0;
 
-    for (int i = 0; i < MAX_NAME_LEN; i++) { buf[i] = '\0'; }
+    for (int i = 0; i < MAX_STR_SIZE; i++) { buf[i] = '\0'; }
 
     do {
 
@@ -131,8 +129,6 @@ Lex Scanner::get_lex() {
                 else {
 
                     n = TID.put(buf);
-
-                    TID[n].set_name(buf);
 
                     return Lex(LEX_ID, n);
                 }

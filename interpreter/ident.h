@@ -48,4 +48,6 @@ public:
     void set_str_value(char* buf);
 
     char* get_str_value() const;
+
+    explicit operator char*&();
 };

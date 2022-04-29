@@ -31,3 +31,5 @@ float Ident::get_real_value() const { return real_value; }
 void Ident::set_str_value(char* buf) { str_value = new char[strlen(buf) + 1]; strcpy(str_value, buf); }
 
 char* Ident::get_str_value() const { return str_value; }
+
+Ident::operator char*&() { return name; }

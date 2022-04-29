@@ -1,7 +1,8 @@
 #pragma once
 
-#include "tid.h"
 #include "lex.h"
+#include "ident.h"
+#include "ts.h"
 
 #include <iostream>
 #include <cstdio>
@@ -21,7 +22,7 @@ class Scanner {
 
 public:
 
-    static Table_Ident TID;
+    static TS<Ident> TID;
 
     Scanner(const char* program);
 
