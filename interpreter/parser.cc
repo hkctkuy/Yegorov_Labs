@@ -831,7 +831,7 @@ void Parser::check_N() {
     }
 }
 
-Parser::Parser(const char* buf) : scan(buf), prog(1000) {}
+Parser::Parser(const char* buf) : scan(buf) {}
 
 void Parser::analyze() {
 

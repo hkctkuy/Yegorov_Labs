@@ -5,15 +5,17 @@
 
 #include <iostream>
 
+#define MAX_POLIZ_SIZE 1000
+
 class Poliz {
 
-    int curr_size, max_size;
+    int curr_size;
 
     Lex* p;
 
 public:
 
-    Poliz(int);
+    Poliz();
 
     ~Poliz();
 

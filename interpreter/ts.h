@@ -2,7 +2,7 @@
 
 #include "string.h"
 
-#define MAX_SIZE 100
+#define MAX_TABLE_SIZE 100
 #define MAX_STR_SIZE 100
 
 template <class T>
@@ -24,7 +24,7 @@ public:
 };
 
 template <class T>
-TS<T>::TS() : size(MAX_SIZE), top(1) {
+TS<T>::TS() : size(MAX_TABLE_SIZE), top(1) {
 
     table = new T[size];
 }
@@ -37,6 +37,8 @@ T& TS<T>::operator[](int i) { return table[i]; }
 
 template <class T>
 int TS<T>::put(const char* buf) {
+
+    if(top >= MAX_TABLE_SIZE) throw "table overflow";
 
     for (int i = 1; i < top; i++) {
 
