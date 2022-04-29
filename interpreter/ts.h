@@ -20,7 +20,7 @@ public:
 
     T& operator[](int i);
 
-    int put(const char* buf);  // Add ID named buf to TID and return its number in TID
+    int put(const char* buf);
 };
 
 template <class T>

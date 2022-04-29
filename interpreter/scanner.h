@@ -22,7 +22,9 @@ class Scanner {
 
 public:
 
-    static TS<Ident> TID;
+    static TS<Ident> TID; // ID table
+
+    static TS<char*> TCS; // Const string table
 
     Scanner(const char* program);
 

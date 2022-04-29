@@ -6,17 +6,13 @@ void Parser::gl() {
 
     curr_type = curr_lex.get_type();
 
-    if (curr_type == LEX_STRING) {
-
-        curr_str_value = curr_lex.get_str_value();
-    }
-    else if (curr_type == LEX_REAL) {
+    if (curr_type == LEX_REAL) {
 
         curr_real_value = curr_lex.get_real_value();
     }
     else {
 
-        curr_int_value = curr_lex.get_int_value();
+        curr_value = curr_lex.get_value();
     }
     //std::cout << curr_lex << std::endl;
 }
@@ -85,7 +81,7 @@ void Parser::D() {
 
     if (curr_type == LEX_ID) {
 
-        curr_ident = curr_int_value;
+        curr_ident = curr_value;
 
         dec();
 
@@ -128,7 +124,7 @@ void Parser::D() {
 
         if (curr_type == LEX_ID) {
 
-            curr_ident = curr_int_value;
+            curr_ident = curr_value;
 
             dec();
 
@@ -402,7 +398,7 @@ void Parser::S() {
 
             check_id();
 
-            prog.push_back(Lex(POLIZ_ADDRESS, curr_int_value));
+            prog.push_back(Lex(POLIZ_ADDRESS, curr_value));
 
             prog.push_back(Lex(LEX_READ));
 
@@ -648,9 +644,9 @@ void Parser::F() {
 
         check_id();
 
-        st.push(Scanner::TID[curr_int_value].get_type());
+        st.push(Scanner::TID[curr_value].get_type());
 
-        prog.push_back(Lex(POLIZ_ADDRESS, curr_int_value));
+        prog.push_back(Lex(POLIZ_ADDRESS, curr_value));
 
         gl();
     }
@@ -659,18 +655,18 @@ void Parser::F() {
 
 void Parser::check_id() {
 
-    if(!Scanner::TID[curr_int_value].get_declare()) throw "ID is not declared";
+    if(!Scanner::TID[curr_value].get_declare()) throw "ID is not declared";
 }
 
 void Parser::dec() {
 
-    if(Scanner::TID[curr_int_value].get_declare()) throw "ID has been already declared!";
+    if(Scanner::TID[curr_value].get_declare()) throw "ID has been already declared!";
 
     else {
 
-        Scanner::TID[curr_int_value].put_declare();
+        Scanner::TID[curr_value].put_declare();
 
-        Scanner::TID[curr_int_value].set_type(ident_type);
+        Scanner::TID[curr_value].set_type(ident_type);
     }
 }
 

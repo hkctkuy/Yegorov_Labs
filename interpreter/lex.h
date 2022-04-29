@@ -29,7 +29,7 @@ class Lex {
 
     type_of_lex type;
 
-    int int_value; float real_value; char* str_value;
+    int value; float real_value;
 
 public:
 
@@ -39,15 +39,11 @@ public:
 
     Lex(type_of_lex t, float v);
 
-    Lex(type_of_lex t, char* buf);
-
     type_of_lex get_type() const;
 
-    int get_int_value() const;
+    int get_value() const;
 
     float get_real_value() const;
-
-    char* get_str_value() const;
 
     friend std::ostream& operator<<(std::ostream& out, Lex l);
 };

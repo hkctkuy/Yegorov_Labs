@@ -15,7 +15,7 @@ class Parser {
 
     type_of_lex ident_type;
 
-    int curr_int_value; float curr_real_value; char* curr_str_value;
+    int curr_value; float curr_real_value;
 
     bool l_value_flag;
 
