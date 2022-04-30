@@ -10,4 +10,6 @@ type_of_lex Lex::get_type() const { return type; }
 
 int Lex::get_value() const { return value; }
 
+void Lex::reset_type(type_of_lex t) { type = t; }
+
 float Lex::get_real_value() const { return real_value; }

@@ -494,6 +494,8 @@ void Parser::E() {
 
         if(!l_value_flag) throw "Not l_value expression";
 
+        else prog[prog.size() - 1].reset_type(POLIZ_ADDRESS);
+
         st.push(curr_type);
 
         gl();
@@ -646,7 +648,7 @@ void Parser::F() {
 
         st.push(Scanner::TID[curr_value].get_type());
 
-        prog.push_back(Lex(POLIZ_ADDRESS, curr_value));
+        prog.push_back(Lex(LEX_ID, curr_value));
 
         gl();
     }

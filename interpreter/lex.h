@@ -45,5 +45,7 @@ public:
 
     float get_real_value() const;
 
+    void reset_type(type_of_lex);
+
     friend std::ostream& operator<<(std::ostream& out, Lex l);
 };
