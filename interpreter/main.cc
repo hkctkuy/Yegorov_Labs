@@ -13,7 +13,7 @@ int main(int argc, char** argv) {
 
         pars.analyze();
 
-        cout << pars.prog << endl;
+        cout << pars.poliz << endl;
 
         return 0;
     }

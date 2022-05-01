@@ -77,7 +77,7 @@ class Parser {
 
 public:
 
-    Poliz prog;
+    Poliz poliz;
 
     Parser(const char*);
 
