@@ -1,5 +1,7 @@
 #pragma once
 
+#define MAX_STACK_SIZE 1000
+
 template <class T>
 class Stack {
 
@@ -11,6 +13,8 @@ class Stack {
     };
 
     chain* top;
+
+    int size;
 
 public:
 
@@ -27,6 +31,8 @@ public:
 
 template <class T>
 Stack<T>::Stack() {
+
+    size = 0;
 
     top = NULL;
 }
@@ -58,6 +64,10 @@ void Stack<T>::push(T t) {
     new_chain->next = top;
 
     top = new_chain;
+
+    size++;
+
+    if(size >= MAX_STACK_SIZE) throw "stack overflow";
 }
 
 template <class T>
@@ -72,6 +82,8 @@ T Stack<T>::pop() {
     top = top->next;
 
     delete pop_chain;
+
+    size--;
 
     return res;
 }

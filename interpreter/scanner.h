@@ -1,9 +1,11 @@
 #pragma once
 
-#include "tid.h"
 #include "lex.h"
+#include "ident.h"
+#include "ts.h"
 
 #include <iostream>
+#include <cstdio>
 #include <cmath>
 
 class Scanner {
@@ -20,7 +22,9 @@ class Scanner {
 
 public:
 
-    static Table_Ident TID;
+    static TS<Ident> TID; // ID table
+
+    static TS<char*> TCS; // Const string table
 
     Scanner(const char* program);
 

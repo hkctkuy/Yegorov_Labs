@@ -13,7 +13,7 @@ class Ident {
 
     type_of_lex type;
 
-    int int_value; float real_value; char* str_value;
+    int value; float real_value;
 
 public:
 
@@ -37,15 +37,13 @@ public:
 
     type_of_lex get_type() const;
 
-    void set_int_value(int v);
+    void set_value(int v);
 
-    int get_int_value() const;
+    int get_value() const;
 
     void set_real_value(float v);
 
     float get_real_value() const;
 
-    void set_str_value(char* buf);
-
-    char* get_str_value() const;
+    explicit operator char*&();
 };

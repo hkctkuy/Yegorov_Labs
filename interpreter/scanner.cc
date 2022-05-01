@@ -1,8 +1,8 @@
 #include "scanner.h"
 
-#define MAX_NAME_LEN 80
+TS<Ident> Scanner::TID;
 
-Table_Ident Scanner::TID(100);
+TS<char*> Scanner::TCS;
 
 const char* Scanner::TW[] = { "", "and", "continue", "else", "false", "for", "if", "int",
                            "not", "or", "program", "read", "real", "string", "true", "while", "write", NULL };
@@ -40,9 +40,9 @@ Lex Scanner::get_lex() {
 
     state CS = H;
 
-    int d, n, p, minus_flag = 1; float f; char buf[MAX_NAME_LEN]; int buf_top = 0;
+    int d, n, p, minus_flag = 1; float f; char buf[MAX_STR_SIZE]; int buf_top = 0;
 
-    for (int i = 0; i < MAX_NAME_LEN; i++) { buf[i] = '\0'; }
+    for (int i = 0; i < MAX_STR_SIZE; i++) { buf[i] = '\0'; }
 
     do {
 
@@ -132,8 +132,6 @@ Lex Scanner::get_lex() {
 
                     n = TID.put(buf);
 
-                    TID[n].set_name(buf);
-
                     return Lex(LEX_ID, n);
                 }
             }
@@ -180,7 +178,9 @@ Lex Scanner::get_lex() {
 
             if (c == '"') {
 
-                return Lex(LEX_STRING_CONST, buf);
+                n = TCS.put(buf);
+
+                return Lex(LEX_STRING_CONST, n);
             }
             else if (c == EOF) {
 
@@ -305,7 +305,11 @@ std::ostream& operator<<(std::ostream& out, Lex l) {
 
     out << l.type << ' ';
 
-    if (l.type < LEX_FIN) { out << "(TW) " << Scanner::TW[l.type] << ' '; }
+    if (l.type < LEX_R_WRITE) { out << "(TW) " << Scanner::TW[l.type] << ' '; }
+
+    else if (l.type == LEX_R_WRITE) { out << "(TW) r_" << Scanner::TW[l.type - 1] << ' '; }
+
+    else if (l.type == LEX_S_WRITE) { out << "(TW) s_" << Scanner::TW[l.type - 2] << ' '; }
 
     else if (l.type == LEX_FIN) { out << "FIN"; }
 
@@ -319,17 +323,17 @@ std::ostream& operator<<(std::ostream& out, Lex l) {
 
     else if (l.type < LEX_INT_CONST) { out << "(TD) s" << Scanner::TD[l.type - LEX_FIN - STRING_OFFSET] << ' '; }
 
-    else if (l.type == LEX_INT_CONST) { out << "const int " << l.int_value; }
+    else if (l.type == LEX_INT_CONST) { out << "const int " << l.value; }
 
     else if (l.type == LEX_REAL_CONST) { out << "const real " << l.real_value; }
 
-    else if (l.type == LEX_STRING_CONST) { out << "const string " << l.str_value; }
+    else if (l.type == LEX_STRING_CONST) { out << "const string " << l.value << ' ' << Scanner::TCS[l.value]; }
 
-    else if (l.type == LEX_ID) { out << "(TID) " << l.int_value << ' ' << Scanner::TID[l.int_value].get_name(); }
+    else if (l.type == LEX_ID) { out << "(TID) " << l.value << ' ' << Scanner::TID[l.value].get_name(); }
 
-    else if (l.type == POLIZ_LABEL) { out << "LABLE " << l.int_value; }
+    else if (l.type == POLIZ_LABEL) { out << "LABLE " << l.value; }
 
-    else if (l.type == POLIZ_ADDRESS) { out << "ADDRESS " << l.int_value << ' ' << Scanner::TID[l.int_value].get_name(); }
+    else if (l.type == POLIZ_ADDRESS) { out << "ADDRESS " << l.value << ' ' << Scanner::TID[l.value].get_name(); }
 
     else if (l.type == POLIZ_GO) { out << "GO "; }
 

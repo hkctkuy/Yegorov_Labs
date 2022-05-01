@@ -1,8 +1,8 @@
 #include "poliz.h"
 
-Poliz::Poliz(int max) {
+Poliz::Poliz() {
 
-    p = new Lex[max_size = max];
+    p = new Lex[MAX_POLIZ_SIZE];
 
     curr_size = 0;
 }
@@ -15,6 +15,8 @@ Poliz::~Poliz() {
 void Poliz::push_back(Lex l) {
 
     p[curr_size++] = l;
+
+    if(curr_size > MAX_POLIZ_SIZE) throw "Poliz overflow";
 }
 
 int Poliz::size() const { return curr_size; }
