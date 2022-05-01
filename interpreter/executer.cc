@@ -2,7 +2,7 @@
 
 void Executer::execute(Poliz& poliz) {
 
-    std::cout << "EXECUTE" << std::endl;
+    //std::cout << "EXECUTE" << std::endl;
 
     int size = poliz.size(), index = 0;
 
