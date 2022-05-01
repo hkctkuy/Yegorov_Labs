@@ -1,5 +1,6 @@
 #include "lex.h"
 #include "parser.h"
+#include "executer.h"
 
 #include <iostream>
 
@@ -13,7 +14,11 @@ int main(int argc, char** argv) {
 
         pars.analyze();
 
-        cout << pars.poliz << endl;
+        //cout << pars.poliz << endl;
+
+        Executer ex;
+
+        ex.execute(pars.poliz);
 
         return 0;
     }
