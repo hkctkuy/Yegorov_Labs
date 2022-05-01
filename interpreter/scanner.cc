@@ -305,7 +305,11 @@ std::ostream& operator<<(std::ostream& out, Lex l) {
 
     out << l.type << ' ';
 
-    if (l.type < LEX_FIN) { out << "(TW) " << Scanner::TW[l.type] << ' '; }
+    if (l.type < LEX_R_WRITE) { out << "(TW) " << Scanner::TW[l.type] << ' '; }
+
+    else if (l.type == LEX_R_WRITE) { out << "(TW) r_" << Scanner::TW[l.type - 1] << ' '; }
+
+    else if (l.type == LEX_S_WRITE) { out << "(TW) s_" << Scanner::TW[l.type - 2] << ' '; }
 
     else if (l.type == LEX_FIN) { out << "FIN"; }
 

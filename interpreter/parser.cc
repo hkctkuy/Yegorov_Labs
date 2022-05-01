@@ -430,10 +430,20 @@ void Parser::S() {
 
         E();
 
-        st.pop();
+        type_of_lex write_type = st.pop();
 
-        poliz.push_back(Lex(LEX_WRITE));
+        if (write_type == LEX_INT) {
 
+            poliz.push_back(Lex(LEX_WRITE));
+        }
+        else if (write_type == LEX_REAL) {
+
+            poliz.push_back(Lex(LEX_R_WRITE));
+        }
+        else {
+
+            poliz.push_back(Lex(LEX_S_WRITE));
+        }
         while (curr_type == LEX_COMMA) {
 
             gl();
