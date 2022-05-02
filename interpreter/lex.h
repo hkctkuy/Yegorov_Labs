@@ -1,8 +1,8 @@
 #pragma once
 
 #include <iostream>
-#include <cstring>
-#include <string>
+
+#include "string.h"
 
 #define REAL_OFFSET 13
 #define STRING_OFFSET 26
