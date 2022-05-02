@@ -8,6 +8,8 @@ int Interpreter::interpretation() {
 
         pars.analyze();
 
+        //std::cout << pars.poliz << std::endl;
+
         exec.execute(pars.poliz);
 
         return 0;
